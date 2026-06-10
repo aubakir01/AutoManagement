@@ -1,4 +1,4 @@
-# AutoManagement — Car Rental Management System
+#  AutoManagement — Car Rental Management System
 
 Web-приложение для управления арендой автомобилей с AI-чатботом, built with Java Spring Boot.
 
@@ -45,6 +45,13 @@ Web-приложение для управления арендой автомо
 
 5. Открой в браузере:
    http://localhost:8081
+
+##  Тестовые аккаунты
+
+| Роль          | Логин  | Пароль |
+|---------------|--------|--------|
+| Администратор | admin  |admin123|
+| Пользователь  | user   |user123 |
 
 ##  Автор
 
