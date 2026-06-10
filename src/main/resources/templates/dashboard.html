@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(
+        ${pageTitle},
+        ${headerTitle},
+        ${headerSubtitle},
+        ~{::section}
+      )">
+
+<section>
+
+    <!-- HERO / Баннер -->
+    <div class="hero">
+        <div class="hero-left">
+            <div class="hero-kicker">RentCar Admin</div>
+            <h2 class="hero-title">Панель управления сервисом аренды</h2>
+            <p class="hero-text">
+                Управляйте автопарком, сотрудниками и арендами. Все ключевые показатели — на одной странице.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="/rentals/new">+ Создать аренду</a>
+                <a class="btn" href="/cars/new">+ Добавить авто</a>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="hero-photo" aria-label="Фото компании"></div>
+        </div>
+    </div>
+
+    <!-- KPI карточки -->
+    <div class="kpi-grid">
+
+        <a class="kpi-card" href="/users">
+            <div class="kpi-label">Сотрудники</div>
+            <div class="kpi-value" th:text="${usersCount}">0</div>
+            <div class="kpi-hint">Открыть список</div>
+        </a>
+
+        <a class="kpi-card" href="/cars">
+            <div class="kpi-label">Автомобили</div>
+            <div class="kpi-value" th:text="${carsCount}">0</div>
+            <div class="kpi-hint">Открыть автопарк</div>
+        </a>
+
+        <a class="kpi-card" href="/rentals">
+            <div class="kpi-label">Аренды</div>
+            <div class="kpi-value" th:text="${rentalsCount}">0</div>
+            <div class="kpi-hint">Открыть аренды</div>
+        </a>
+
+        <a class="kpi-card" href="/cars?status=Свободен">
+            <div class="kpi-label">Свободные авто</div>
+            <div class="kpi-value" th:text="${freeCars}">0</div>
+            <div class="kpi-hint">Показать свободные</div>
+        </a>
+
+    </div>
+    <!-- Курс доллара -->
+    <div th:if="${usdRate}" style="max-width:1100px; margin:0 auto 16px auto;">
+        <a href="/exchange" style="text-decoration:none;">
+            <div class="card" style="display:flex; align-items:center; justify-content:space-between; padding:14px 20px;">
+                <div>
+                    <div style="font-weight:800; color:#2c3e50; margin-bottom:4px;">💵 Курс доллара</div>
+                    <div style="font-size:13px; color:#888;">
+                        Обновлено: <span th:text="${#temporals.format(usdRate.fetchedAt, 'dd.MM.yyyy HH:mm')}"></span>
+                    </div>
+                </div>
+                <div style="font-size:28px; font-weight:900; color:#2c3e50;">
+                    1 USD = <span th:text="${#numbers.formatDecimal(usdRate.rate, 1, 2)}"></span> KZT
+                </div>
+                <div style="color:#2980b9; font-weight:700;">Подробнее →</div>
+            </div>
+        </a>
+    </div>
+    <!-- О компании / карточки -->
+    <div class="info-grid">
+
+        <div class="card">
+            <h3 class="card-title">О компании</h3>
+            <p class="card-text">
+                Учебная админ-панель сервиса аренды автомобилей. Цель — продемонстрировать CRUD-операции,
+                фильтры, бизнес-правила аренды и работу с базой данных.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-title">Автопарк</div>
+                    <div class="feature-text">Добавление, редактирование и статусы авто.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Аренды</div>
+                    <div class="feature-text">Создание аренды, расчёт суммы, запрет для арендованного авто.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Сотрудники</div>
+                    <div class="feature-text">Управление пользователями (для учебного проекта).</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Быстрые действия</h3>
+
+            <div class="quick-list">
+                <a class="quick-item" href="/rentals/new">
+                    <div class="quick-main">Создать аренду</div>
+                    <div class="quick-sub">Оформить новую аренду на свободную машину</div>
+                </a>
+                <a class="quick-item" href="/cars?status=Свободен">
+                    <div class="quick-main">Свободные автомобили</div>
+                    <div class="quick-sub">Показать доступные авто прямо сейчас</div>
+                </a>
+                <a class="quick-item" href="/cars/new">
+                    <div class="quick-main">Добавить автомобиль</div>
+                    <div class="quick-sub">Пополнить автопарк</div>
+                </a>
+                <a class="quick-item" href="/users">
+                    <div class="quick-main">Сотрудники</div>
+                    <div class="quick-sub">Перейти в список сотрудников</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+</html>

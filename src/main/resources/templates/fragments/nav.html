@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="nav">
+
+<!-- Кнопка-гамбургер -->
+<button class="hamburger" type="button" onclick="toggleSidebar()" aria-label="Открыть меню">
+    ☰
+</button>
+
+<!-- Затемнение фона -->
+<div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+<!-- Боковое меню -->
+<aside id="sidebar" class="sidebar">
+    <div class="sidebar-head">
+        <div>
+            <div class="sidebar-title">RentCar Admin</div>
+            <div class="sidebar-subtitle">Панель управления</div>
+        </div>
+        <button class="close-btn" type="button" onclick="closeSidebar()" aria-label="Закрыть меню">✕</button>
+    </div>
+
+    <nav class="nav">
+        <a class="nav-item" href="/">Главная</a>
+        <a class="nav-item" href="/users">Сотрудники</a>
+        <a class="nav-item" href="/cars">Автомобили</a>
+        <a class="nav-item" href="/rentals">Аренды</a>
+        <a class="nav-item" href="/clients">Клиенты</a>
+        <a class="nav-item" href="/payments">Платежи</a>
+        <a class="nav-item" href="/reports">Отчёты</a>
+
+        <div class="nav-sep"></div>
+
+        <a class="nav-item" href="/exchange">💵 Курс валют</a>
+
+        <div class="nav-sep"></div>
+
+
+        <div class="nav-sep"></div>
+        <a class="nav-item" href="/logout" style="color:#c0392b;">🚪 Выйти</a>
+
+
+        <a class="nav-item" href="/about">О системе</a>
+        <a class="nav-item" href="/settings">Настройки</a>
+    </nav>
+</aside>
+
+<script>
+    function toggleSidebar() {
+        const s = document.getElementById('sidebar');
+        const o = document.getElementById('overlay');
+        const isOpen = s.classList.contains('open');
+        if (isOpen) { closeSidebar(); } else { openSidebar(); }
+    }
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('overlay').classList.add('show');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    }
+</script>
+
+</body>
+</html>

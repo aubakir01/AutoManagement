@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(
+        ${pageTitle},
+        ${headerTitle},
+        ${headerSubtitle},
+        ~{::section}
+      )">
+
+<section>
+
+    <div style="max-width:800px; margin:0 auto;">
+
+        <!-- Текущий курс -->
+        <div class="card" style="margin-bottom:20px; text-align:center;">
+            <div style="font-size:14px; color:#888; margin-bottom:8px;">Курс доллара к тенге</div>
+
+            <div th:if="${latest}" style="font-size:48px; font-weight:900; color:#2c3e50;">
+                1 USD = <span th:text="${#numbers.formatDecimal(latest.rate, 1, 2)}">0</span> KZT
+            </div>
+
+            <div th:if="${latest == null}"
+                 style="font-size:24px; color:#888;">
+                Курс ещё не загружен
+            </div>
+
+            <div th:if="${latest}"
+                 style="font-size:13px; color:#888; margin-top:8px;">
+                Обновлено: <span th:text="${#temporals.format(latest.fetchedAt, 'dd.MM.yyyy HH:mm')}"></span>
+            </div>
+
+            <form method="post" action="/exchange/fetch" style="margin-top:16px;">
+                <button type="submit" class="btn btn-primary">
+                    🔄 Обновить курс
+                </button>
+            </form>
+        </div>
+
+        <!-- История курсов -->
+        <div class="card">
+            <h3 style="margin:0 0 16px 0; color:#2c3e50;">История запросов</h3>
+
+            <div th:if="${#lists.isEmpty(history)}"
+                 style="color:#888; text-align:center; padding:20px;">
+                История пуста — нажмите «Обновить курс»
+            </div>
+
+            <table th:if="${!#lists.isEmpty(history)}" style="width:100%;">
+                <tr>
+                    <th>№</th>
+                    <th>Валюта</th>
+                    <th>Курс (KZT)</th>
+                    <th>Дата и время</th>
+                </tr>
+                <tr th:each="r : ${history}">
+                    <td th:text="${r.id}"></td>
+                    <td th:text="${r.currency}"></td>
+                    <td th:text="${#numbers.formatDecimal(r.rate, 1, 2)}"></td>
+                    <td th:text="${#temporals.format(r.fetchedAt, 'dd.MM.yyyy HH:mm:ss')}"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</section>
+</html>

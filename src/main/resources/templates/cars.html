@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(
+        ${pageTitle},
+        ${headerTitle},
+        ${headerSubtitle},
+        ~{::section}
+      )">
+
+<section>
+
+    <!-- Модальное окно для просмотра фото -->
+    <div id="photoModal" onclick="closeModal()"
+         style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75);
+                z-index:9999; align-items:center; justify-content:center; cursor:pointer;">
+        <div onclick="event.stopPropagation()"
+             style="position:relative; max-width:90vw; max-height:90vh;">
+            <img id="modalImg" src="" alt="Фото"
+                 style="max-width:90vw; max-height:85vh; border-radius:12px;
+                        box-shadow:0 20px 60px rgba(0,0,0,0.5); display:block;">
+            <button onclick="closeModal()"
+                    style="position:absolute; top:-14px; right:-14px; width:32px; height:32px;
+                           border-radius:50%; border:none; background:#c0392b; color:white;
+                           font-size:18px; cursor:pointer; line-height:1;">×</button>
+        </div>
+    </div>
+
+    <!-- Фильтры -->
+    <div style="max-width:1100px; margin:0 auto 20px auto;">
+        <form method="get" action="/cars">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+                <input class="input" type="text" name="q"
+                       placeholder="Марка или модель"
+                       th:value="${q}"
+                       style="min-width:200px;"/>
+                <select name="status" class="input" style="min-width:160px;">
+                    <option value="" th:selected="${status == null or status == ''}">Все статусы</option>
+                    <option value="Свободен"        th:selected="${status == 'Свободен'}">Свободен</option>
+                    <option value="Арендован"       th:selected="${status == 'Арендован'}">Арендован</option>
+                    <option value="На обслуживании" th:selected="${status == 'На обслуживании'}">На обслуживании</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Найти</button>
+                <a href="/cars" class="link-reset">Сброс</a>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span style="font-weight:700; color:#2c3e50; white-space:nowrap;">Год:</span>
+                <input class="input" type="number" name="yearFrom" placeholder="от"
+                       th:value="${yearFrom}" style="min-width:90px; max-width:100px;"/>
+                <input class="input" type="number" name="yearTo" placeholder="до"
+                       th:value="${yearTo}" style="min-width:90px; max-width:100px;"/>
+                <span style="font-weight:700; color:#2c3e50; white-space:nowrap; margin-left:10px;">Цена/день:</span>
+                <input class="input" type="number" name="priceFrom" placeholder="от"
+                       th:value="${priceFrom}" style="min-width:90px; max-width:110px;"/>
+                <input class="input" type="number" name="priceTo" placeholder="до"
+                       th:value="${priceTo}" style="min-width:90px; max-width:110px;"/>
+            </div>
+        </form>
+    </div>
+
+    <!-- Кнопки -->
+    <div style="max-width:1100px; margin:0 auto 16px auto; display:flex; gap:10px;">
+        <a href="/cars/new" class="btn btn-primary">+ Добавить автомобиль</a>
+        <a th:href="@{/cars/export(q=${q}, status=${status}, yearFrom=${yearFrom}, yearTo=${yearTo}, priceFrom=${priceFrom}, priceTo=${priceTo})}"
+           class="btn" style="background:#27ae60;">
+            ⬇ Выгрузить Excel
+        </a>
+    </div>
+
+    <!-- Таблица -->
+    <div style="max-width:1100px; margin:0 auto; overflow-x:auto;">
+        <table style="min-width:900px; width:100%;">
+            <tr>
+                <th>Фото</th>
+                <th>ID</th>
+                <th>Марка</th>
+                <th>Модель</th>
+                <th>Год</th>
+                <th>Цена/день</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+
+            <tr th:each="c : ${cars}">
+                <td>
+                    <img th:if="${c.photoPath != null}"
+                         th:src="${c.photoPath}"
+                         alt="Фото"
+                         onclick="openModal(this.src)"
+                         style="width:60px; height:40px; object-fit:cover; border-radius:6px;
+                                border:1px solid #ddd; cursor:pointer;
+                                transition: transform 0.15s ease;"
+                         onmouseover="this.style.transform='scale(1.1)'"
+                         onmouseout="this.style.transform='scale(1)'">
+                    <span th:if="${c.photoPath == null}"
+                          style="color:#bbb; font-size:13px;">Нет фото</span>
+                </td>
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.brand}"></td>
+                <td th:text="${c.model}"></td>
+                <td th:text="${c.year}"></td>
+                <td th:text="${c.pricePerDay}"></td>
+                <td th:text="${c.status}"></td>
+                <td>
+                    <a th:href="@{/cars/edit/{id}(id=${c.id})}" class="btn btn-edit">Редактировать</a>
+                    <form th:action="@{/cars/delete/{id}(id=${c.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-delete"
+                                onclick="return confirm('Удалить автомобиль?')">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function openModal(src) {
+            const modal = document.getElementById('photoModal');
+            document.getElementById('modalImg').src = src;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие по клавише Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+
+</section>
+</html>

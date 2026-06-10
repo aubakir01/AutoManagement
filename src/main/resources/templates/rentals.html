@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(
+        ${pageTitle},
+        ${headerTitle},
+        ${headerSubtitle},
+        ~{::section}
+      )">
+
+<section>
+
+    <div class="actions-bar">
+        <a href="/rentals/new" class="btn btn-primary">+ Создать аренду</a>
+
+        <form method="get" action="/rentals" class="filter-form">
+            <input class="input" type="text" name="q"
+                   placeholder="Поиск авто: марка или модель"
+                   th:value="${q}"/>
+            <input class="input" type="date" name="from" th:value="${from}">
+            <input class="input" type="date" name="to" th:value="${to}">
+            <button type="submit" class="btn btn-primary">Фильтр</button>
+            <a href="/rentals" class="link-reset">Сброс</a>
+        </form>
+    </div>
+
+    <div th:if="${error}" class="form-error" th:text="${error}"></div>
+
+    <div class="actions-bar">
+        <div></div>
+        <div style="opacity:0.75;">Список всех аренд</div>
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Авто</th>
+            <th>Сотрудник</th>
+            <th>Начало</th>
+            <th>Конец</th>
+            <th>Сумма</th>
+            <th>Действия</th>
+        </tr>
+
+        <tr th:each="r : ${rentals}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.car.brand + ' ' + r.car.model}"></td>
+            <td th:text="${r.user.username}"></td>
+            <td th:text="${r.startDate}"></td>
+            <td th:text="${r.endDate}"></td>
+            <td th:text="${r.totalPrice}"></td>
+            <td>
+                <form th:if="${r.car.status == 'Арендован'}"
+                      th:action="@{/rentals/complete/{id}(id=${r.id})}"
+                      method="post"
+                      style="display:inline;">
+                    <button type="submit"
+                            class="btn btn-edit"
+                            onclick="return confirm('Вернуть авто в парк?')">
+                        Вернуть авто
+                    </button>
+                </form>
+                <span th:if="${r.car.status != 'Арендован'}"
+                      style="color: #27ae60; font-weight: 700;">
+                    ✓ Завершена
+                </span>
+            </td>
+        </tr>
+    </table>
+
+</section>
+</html>

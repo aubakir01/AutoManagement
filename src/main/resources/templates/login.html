@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход — RentCar</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f4f6f8;
+            margin: 0;
+        }
+        .login-box {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+        .login-sub {
+            text-align: center;
+            color: #888;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+        .login-label {
+            display: block;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d6dc;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .login-btn:hover { opacity: 0.9; }
+        .login-error {
+            background: #fdecea;
+            color: #c0392b;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <div class="login-title">🚗 RentCar Admin</div>
+    <div class="login-sub">Войдите в систему</div>
+
+    <div th:if="${error}" class="login-error" th:text="${error}"></div>
+
+    <form method="post" action="/login">
+        <label class="login-label">Логин</label>
+        <input class="login-input" type="text" name="username" placeholder="Введите логин" required>
+
+        <label class="login-label">Пароль</label>
+        <input class="login-input" type="password" name="password" placeholder="Введите пароль" required>
+
+        <button class="login-btn" type="submit">Войти</button>
+    </form>
+</div>
+
+</body>
+</html>

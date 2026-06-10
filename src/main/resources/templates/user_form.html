@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+    <meta charset="UTF-8">
+    <title>Добавить пользователя</title>
+
+    </head>
+<body>
+<div th:replace="fragments/nav :: body"></div>
+
+
+<div class="card">
+    <h1 th:text="${user.id} == null ? 'Добавить сотрудника' : 'Редактировать сотрудника'"></h1>
+
+
+    <form th:action="${user.id} == null ? @{/users} : @{/users/update/{id}(id=${user.id})}"
+          th:object="${user}" method="post">
+
+    <label>Username</label>
+        <input type="text" th:field="*{username}" required>
+
+        <label>Email</label>
+        <input type="email" th:field="*{email}" required>
+
+        <label>Role</label>
+        <input type="text" th:field="*{role}" required>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <a th:href="@{/users}">← Назад к списку</a>
+</div>
+
+</body>
+</html>

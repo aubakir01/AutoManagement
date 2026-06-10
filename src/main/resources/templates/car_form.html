@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <meta charset="UTF-8">
+    <title>Автомобиль</title>
+</head>
+<body>
+<div th:replace="fragments/nav :: body"></div>
+
+<div class="topbar">
+    <h1 style="margin:0;" th:text="${car.id} == null ? 'Добавить автомобиль' : 'Редактировать автомобиль'"></h1>
+    <p style="margin:6px 0 0 0; opacity:0.85;">
+        <a href="/cars" style="color:white;">← к списку автомобилей</a>
+    </p>
+</div>
+
+<div class="card" style="max-width:600px; margin:30px auto;">
+    <form th:action="${car.id} == null ? @{/cars} : @{/cars/update/{id}(id=${car.id})}"
+          th:object="${car}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <label>Марка</label>
+        <input type="text" th:field="*{brand}" class="input" style="width:100%; margin-bottom:10px;">
+        <div class="err" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></div>
+
+        <label>Модель</label>
+        <input type="text" th:field="*{model}" class="input" style="width:100%; margin-bottom:10px;">
+        <div class="err" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
+
+        <label>Год</label>
+        <input type="number" th:field="*{year}" class="input" style="width:100%; margin-bottom:10px;">
+        <div class="err" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+
+        <label>Цена за день</label>
+        <input type="number" th:field="*{pricePerDay}" class="input" style="width:100%; margin-bottom:10px;">
+        <div class="err" th:if="${#fields.hasErrors('pricePerDay')}" th:errors="*{pricePerDay}"></div>
+
+        <label>Статус</label>
+        <select th:field="*{status}" class="input" style="width:100%; margin-bottom:10px;">
+            <option value="">-- выберите --</option>
+            <option value="Свободен">Свободен</option>
+            <option value="Арендован">Арендован</option>
+            <option value="На обслуживании">На обслуживании</option>
+        </select>
+        <div class="err" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+
+        <!-- Фото -->
+        <label>Фото автомобиля</label>
+
+        <!-- Текущее фото если есть -->
+        <div th:if="${car.photoPath != null}" style="margin-bottom:10px;">
+            <img th:src="${car.photoPath}"
+                 alt="Фото"
+                 style="width:120px; height:80px; object-fit:cover; border-radius:8px; border:1px solid #ddd;">
+            <div style="font-size:13px; color:#888; margin-top:4px;">Текущее фото</div>
+        </div>
+
+        <input type="file" name="photo" accept="image/*"
+               class="input" style="width:100%; margin-bottom:16px;">
+
+        <div style="display:flex; gap:10px; margin-top:8px;">
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+            <a class="btn" href="/cars" style="background:#888;">Отмена</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

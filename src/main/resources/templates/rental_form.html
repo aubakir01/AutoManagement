@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(
+        ${pageTitle},
+        ${headerTitle},
+        ${headerSubtitle},
+        ~{::section}
+      )">
+
+<section>
+
+    <div class="card form-card">
+        <form method="post" action="/rentals" class="form-grid">
+
+            <div class="field">
+                <label>Автомобиль</label>
+                <select name="carId" class="input" required>
+                    <option value="">-- выберите авто --</option>
+                    <option th:each="c : ${cars}"
+                            th:value="${c.id}"
+                            th:text="${c.brand + ' ' + c.model + ' (' + c.year + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Сотрудник (кто оформил)</label>
+                <select name="userId" class="input" required>
+                    <option value="">-- выберите сотрудника --</option>
+                    <option th:each="u : ${users}"
+                            th:value="${u.id}"
+                            th:text="${u.username + ' — ' + u.role}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Дата начала</label>
+                <input type="date" name="startDate" class="input" required>
+            </div>
+
+            <div class="field">
+                <label>Дата окончания</label>
+                <input type="date" name="endDate" class="input" required>
+            </div>
+
+
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Создать аренду</button>
+                <a href="/rentals" class="link-reset">Отмена</a>
+            </div>
+
+            <div th:if="${error}" class="form-error" th:text="${error}"></div>
+
+        </form>
+    </div>
+
+</section>
+</html>
