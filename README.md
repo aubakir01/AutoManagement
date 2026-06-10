@@ -56,3 +56,17 @@ Web-приложение для управления арендой автомо
 ##  Автор
 
 **Amir Aubakir** — [LinkedIn](https://www.linkedin.com/in/amir-aubakir) | [GitHub](https://github.com/aubakir01)
+##  Скриншоты
+
+### Страница входа
+![Login](screenshots/login.jpg)
+
+### Панель управления
+![Dashboard](screenshots/dashboard.jpg)
+
+### Управление автомобилями
+![Cars](screenshots/cars.jpg)
+
+### AI Чатбот
+![Chatbot](screenshots/chatbot.jpg)
+![Chatbot Demo](screenshots/chatbot2.jpg)
